@@ -67,6 +67,22 @@ const userRoutes = (app, fs) => {
       }, true);
     });
 
+    app.delete('/users/:id', (req, res) => {
+      readFile(data => {
+        const userId = req.params['id'];
+        
+        if(!data[userId]) {
+          res.status(400).send(`users id:${userId} not found`)
+          return
+        }
+
+        delete data[userId];
+    
+        writeFile(JSON.stringify(data, null, 2), () => {
+          res.status(200).send(`users id:${userId} removed`);
+        });
+      }, true);
+    });
   };  
-  
+
 module.exports = userRoutes;
