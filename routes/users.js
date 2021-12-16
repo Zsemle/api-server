@@ -1,14 +1,40 @@
 const userRoutes = (app, fs) => {
     const dataPath = './data/users.json';
-  
-    app.get('/users', (req, res) => {
-      fs.readFile(dataPath, 'utf8', (err, data) => {
+
+    const readFile = (
+      callback,
+      returnJson = false,
+      filePath = dataPath,
+      encoding = 'utf8'
+    ) => {
+      fs.readFile(filePath, encoding, (err, data) => {
         if (err) {
           throw err;
         }
   
-        res.send(JSON.parse(data));
+        callback(returnJson ? JSON.parse(data) : data);
       });
+    };
+  
+    const writeFile = (
+      fileData,
+      callback,
+      filePath = dataPath,
+      encoding = 'utf8'
+    ) => {
+      fs.writeFile(filePath, fileData, encoding, err => {
+        if (err) {
+          throw err;
+        }
+  
+        callback();
+      });
+    };
+    
+    app.get('/users', (req, res) => {
+      readFile(data => {
+        res.send(data);
+      }, true);
     });
   };
   
