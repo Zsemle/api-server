@@ -1,7 +1,8 @@
 const { nanoid } = require('nanoid');
+const path = require('path');
 
 const userRoutes = (app, fs) => {
-  const dataPath = './data/users.json';
+  const dataPath = path.join(__dirname, '..', 'data', 'users.json');
 
   const readFile = (
     callback,
